@@ -7,5 +7,5 @@
     "email": "junmer@foxmail.com"
   },
   "repository": "https://github.com/junmer/html2js.git",
-  "main": "html2js.js",
+  "main": "html2js.js"
 }
