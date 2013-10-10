@@ -5,7 +5,7 @@ var filename = 'test.html';
 
 var html = fs.readFileSync(filename, 'utf8');
 
-var mode = ['format', 'defalut', 'compress'];
+var mode = ['format', 'default', 'compress'];
 
 var arr = [];
 

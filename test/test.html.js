@@ -7,7 +7,7 @@ define(function () {
     + '  </div>\n'
     + '</div>';
 });
-// defalut
+// default
 define(function () { return '<div id="i-am-a-id">\n  <div class="i-am-a-class">\n    i am test\n  </div>\n</div>';});
 // compress
 define(function () { return '<div id=\"i-am-a-id\"><div class=\"i-am-a-class\">i am test</div></div>';});
