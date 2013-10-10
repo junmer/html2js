@@ -1,0 +1,11 @@
+{
+  "name": "html2js",
+  "description": "html2js",
+  "version": "0.0.1",
+  "author": {
+    "name": "junmer",
+    "email": "junmer@foxmail.com"
+  },
+  "repository": "https://github.com/junmer/html2js.git",
+  "main": "html2js.js",
+}
