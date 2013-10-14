@@ -16,7 +16,10 @@
     function trim(source) {
         return String(source)
             .replace(
-                new RegExp('(^[\\s\\t\\xa0\\u3000]+)|([\\u3000\\xa0\\s\\t]+\x24)', 'g'),
+                new RegExp(
+                    '(^[\\s\\t\\xa0\\u3000]+)|([\\u3000\\xa0\\s\\t]+\x24)',
+                    'g'
+                ),
                 ''
         );
     }
@@ -30,20 +33,13 @@
      * @return {string}
      */
     function wrap(content, format) {
-        if(!!format){
-            return [
-                "define(function () {",
-                "    return ''",
-                "    + " + content + ";",
-                "});"
-            ].join('\n');
-        }
-        else{
-            return ""
-                + "define(function () { return '"
-                + content
-                + "';});";
-        }
+
+        return [
+            'define(function () {',
+            (!!format ? '    ' : '') + 'return ' + content + ';',
+            '});'
+        ].join(!!format ? '\n' : '');
+
     }
 
 
@@ -56,55 +52,63 @@
      * @return {String}
      */
     function html2js(content, opt) {
-        var options = arguments.length > 1 ? opt : {};
-        var output;
 
+        var options = arguments.length > 1 ? opt : {};  // 默认配置
+        var output;                                     // 输出
+
+
+        // 默认 esacpe
+        // 不压缩 无+连接
+        // 参考 requirejs text
+        // see: http://github.com/requirejs/text for details
+        output = content.replace(/(['\\])/g, '\\$1')
+            .replace(/[\f]/g, '\\f')
+            .replace(/[\b]/g, '\\b')
+            .replace(/[\n]/g, '\\n')
+            .replace(/[\t]/g, '\\t')
+            .replace(/[\r]/g, '\\r')
+            .replace(/[\u2028]/g, '\\u2028')
+            .replace(/[\u2029]/g, '\\u2029');
+
+
+        // 全压缩
         if (options.mode === 'compress') {
-            // 全压缩
-            var arrCode = [];
-            content.replace(/\\/g, '\\\\')
-                .replace(/[\n]/g, '\\n')
-                .replace(/[\r]/g, '\\r')
-                .replace(/['"]/g, function (match) {
-                    return '\\' + match;
+
+            output = output.split('\\n')
+                .map(function (str) {
+                    return trim(str);
                 })
-                .split('\\n')
-                .forEach(function (str) {
-                    arrCode.push(trim(str));
-                });
+                .join('');
 
-            output = arrCode.join('');
         }
-        else if (options.mode === 'format') {
-            // 不压缩 + 连接
-            output = content.replace(/\\/g, '\\\\')
-                .replace(/'/g, '\\\'')
-                .replace(/\r?\n/g, '\\n\'\n    + \'');
 
-            output = "'" + output + "'";
+        // 不压缩 + 连接
+        // 编码规范
+        // https://github.com/ecomfe/spec/blob/master/javascript-code-style.md
+        if (options.mode === 'format') {
+
+            // fix 首行
+            output = '\\n' + output;
+
+            output = output.split('\\n')
+                .map(function (str) {
+                    return str.replace(/(^\s*)/g, '$1\'') + '\'';
+                })
+                .join('\n        + ');
+
         }
         else {
-            // 默认
-            // 不压缩 无+连接
-            // 参考 requirejs text
-            // see: http://github.com/requirejs/text for details
-            output = content.replace(/(['\\])/g, '\\$1')
-                .replace(/[\f]/g, '\\f')
-                .replace(/[\b]/g, '\\b')
-                .replace(/[\n]/g, '\\n')
-                .replace(/[\t]/g, '\\t')
-                .replace(/[\r]/g, '\\r')
-                .replace(/[\u2028]/g, '\\u2028')
-                .replace(/[\u2029]/g, '\\u2029');
+
+            // fix 左右 ’
+            output = '\'' + output + '\'';
+
         }
 
+        // 包起来
         if (options.wrap) {
-            if (options.mode === 'format') {
-                output = wrap(output, true);
-            }
-            else {
-                output = wrap(output);
-            }
+
+            output = wrap(output, options.mode === 'format');
+
         }
 
         return output;
