@@ -5,17 +5,20 @@ var filename = 'test.html';
 
 var html = fs.readFileSync(filename, 'utf8');
 
-var mode = ['format', 'default', 'compress'];
+var modes = ['format', 'default', 'compress'];
 
-var arr = [];
-
-mode.forEach(
-    function (val) {
-        arr.push( '// ' + val );
-        arr.push( html2js( html, {mode: val, wrap: true} ) );
+var output = modes.map(
+    function (mode) {
+        return ''
+            + '// '
+            + mode
+            + '\n'
+            + html2js(html, {
+                mode: mode,
+                wrap: true
+            });
     }
-);
+).join('\n');
 
-var output = arr.join('\n');
 console.log(output);
 fs.writeFile( filename + '.js', output );

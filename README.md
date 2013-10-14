@@ -25,18 +25,21 @@ var filename = 'test.html';
 
 var html = fs.readFileSync(filename, 'utf8');
 
-var mode = ['format', 'default', 'compress'];
+var modes = ['format', 'default', 'compress'];
 
-var arr = [];
-
-mode.forEach(
-    function (val) {
-        arr.push( '// ' + val );
-        arr.push( html2js( html, {mode: val, wrap: true} ) );
+var output = modes.map(
+    function (mode) {
+        return ''
+            + '// '
+            + mode
+            + '\n'
+            + html2js(html, {
+                mode: mode,
+                wrap: true
+            });
     }
-);
+).join('\n');
 
-var output = arr.join('\n');
 console.log(output);
 fs.writeFile( filename + '.js', output );
 ```
@@ -45,15 +48,15 @@ output:
 // format
 define(function () {
     return ''
-    + '<div id="i-am-a-id">\n'
-    + '  <div class="i-am-a-class">\n'
-    + '    i am test\n'
-    + '  </div>\n'
-    + '</div>';
+        + '<div id="i-am-a-id">'
+        +   '<div class="i-am-a-class">'
+        +     'i am test'
+        +   '</div>'
+        + '</div>';
 });
 // default
-define(function () { return '<div id="i-am-a-id">\n  <div class="i-am-a-class">\n    i am test\n  </div>\n</div>';});
+define(function () {return '<div id="i-am-a-id">\n  <div class="i-am-a-class">\n    i am test\n  </div>\n</div>';});
 // compress
-define(function () { return '<div id=\"i-am-a-id\"><div class=\"i-am-a-class\">i am test</div></div>';});
+define(function () {return '<div id="i-am-a-id"><div class="i-am-a-class">i am test</div></div>';});
 ```
 
