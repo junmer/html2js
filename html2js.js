@@ -74,7 +74,7 @@
         // 全压缩
         if (options.mode === 'compress') {
 
-            output = output.split('\\n')
+            output = output.split(/\\r|\\n/)
                 .map(function (str) {
                     return trim(str);
                 })
