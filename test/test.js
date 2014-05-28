@@ -1,13 +1,17 @@
-var fs = require('fs');
-var html2js = require('../html2js');
+/**
+ * @file simple test
+ */
 
-var filename = 'test.html';
+var fs          = require('fs');
+var path        = require('path');
+var html2js     = require('../html2js');
 
-var html = fs.readFileSync(filename, 'utf8');
+var filename    = 'test2.html';
+var filePath    = path.resolve( __dirname, filename );
+var html        = fs.readFileSync( filePath , 'utf8' );
+var modes       = ['format', 'default', 'compress'];
 
-var modes = ['format', 'default', 'compress'];
-
-var output = modes.map(
+var output      = modes.map(
     function (mode) {
         return ''
             + '// '
@@ -21,4 +25,5 @@ var output = modes.map(
 ).join('\n');
 
 console.log(output);
-fs.writeFile( filename + '.js', output );
+
+fs.writeFile( filePath + '.js', output );
