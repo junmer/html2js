@@ -3,7 +3,11 @@ html2js
 
 RT. html2js. 解决require tpl无法跨域的问题
 
-简单使用示例:
+## example
+
+```
+npm run example
+```
 
 test.html:
 
@@ -15,37 +19,39 @@ test.html:
 </div>
 ```
 
-js:
+test.html.js:
 
-```javascript
-var fs = require('fs');
-var html2js = require('../html2js');
-
-var filename = 'test.html';
-
-var html = fs.readFileSync(filename, 'utf8');
-
-var modes = ['format', 'default', 'compress'];
-
-var output = modes.map(
-    function (mode) {
-        return ''
-            + '// '
-            + mode
-            + '\n'
-            + html2js(html, {
-                mode: mode,
-                wrap: true
-            });
-    }
-).join('\n');
-
-console.log(output);
-fs.writeFile( filename + '.js', output );
 ```
-output:
-```javascript
-// format
+/**
+ * html2js(source, {
+ *     mode: 'default'
+ *     wrap: 'amd'
+ * })
+ */
+define(function () {return '<div id="i-am-a-id">\n  <div class="i-am-a-class">\n    i am test\n  </div>\n</div>';});
+
+/**
+ * html2js(source, {
+ *     mode: 'default'
+ *     wrap: 'commonjs'
+ * })
+ */
+module.exports = '<div id="i-am-a-id">\n  <div class="i-am-a-class">\n    i am test\n  </div>\n</div>';
+
+/**
+ * html2js(source, {
+ *     mode: 'default'
+ *     wrap: false
+ * })
+ */
+'<div id="i-am-a-id">\n  <div class="i-am-a-class">\n    i am test\n  </div>\n</div>'
+
+/**
+ * html2js(source, {
+ *     mode: 'format'
+ *     wrap: 'amd'
+ * })
+ */
 define(function () {
     return ''
         + '<div id="i-am-a-id">'
@@ -54,9 +60,60 @@ define(function () {
         +   '</div>'
         + '</div>';
 });
-// default
-define(function () {return '<div id="i-am-a-id">\n  <div class="i-am-a-class">\n    i am test\n  </div>\n</div>';});
-// compress
+
+/**
+ * html2js(source, {
+ *     mode: 'format'
+ *     wrap: 'commonjs'
+ * })
+ */
+module.exports = ''
+        + '<div id="i-am-a-id">'
+        +   '<div class="i-am-a-class">'
+        +     'i am test'
+        +   '</div>'
+        + '</div>';
+
+/**
+ * html2js(source, {
+ *     mode: 'format'
+ *     wrap: false
+ * })
+ */
+''
+        + '<div id="i-am-a-id">'
+        +   '<div class="i-am-a-class">'
+        +     'i am test'
+        +   '</div>'
+        + '</div>'
+
+/**
+ * html2js(source, {
+ *     mode: 'compress'
+ *     wrap: 'amd'
+ * })
+ */
 define(function () {return '<div id="i-am-a-id"><div class="i-am-a-class">i am test</div></div>';});
+
+/**
+ * html2js(source, {
+ *     mode: 'compress'
+ *     wrap: 'commonjs'
+ * })
+ */
+module.exports = '<div id="i-am-a-id"><div class="i-am-a-class">i am test</div></div>';
+
+/**
+ * html2js(source, {
+ *     mode: 'compress'
+ *     wrap: false
+ * })
+ */
+'<div id="i-am-a-id"><div class="i-am-a-class">i am test</div></div>'
 ```
 
+## test
+
+```
+npm test
+```
