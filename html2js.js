@@ -86,7 +86,7 @@
     function wrap(content, wrapType, modeType) {
 
         // 不需要包的 直接返回 content
-        if(!wrapType) {
+        if (!wrapType) {
             return content;
         }
 
@@ -104,18 +104,26 @@
 
     }
 
+    /**
+     * SPLIT_LINE_TOKEN
+     * @type {RegExp}
+     */
+    var SPLIT_LINE_TOKEN = /\\r|\\n/;
+
 
     /**
      * html2js
-     * @param  {String}   content 目标
-     * @param  {Object=}  opt     配置
-     * @param  {String＝} opt.mode   模式
+     * @param  {string}     content 目标
+     * @param  {Object=}    opt     配置
+     * @param  {string＝}   opt.mode
      *                               compress 压缩
      *                               format   格式化
      *                               default  默认 不处理
      *
-     * @param  {String} opt.wrap     转AMD
-     * @return {String}
+     * @param  {string=}    opt.wrap 包
+     *                               amd
+     *                               commonjs
+     * @return {string}
      */
     function html2js(content, opt) {
 
@@ -140,7 +148,7 @@
         // 全压缩
         if (options.mode === 'compress') {
 
-            output = output.split(/\\r|\\n/)
+            output = output.split(SPLIT_LINE_TOKEN)
                 .map(function (str) {
                     return trim(str);
                 })
@@ -156,7 +164,7 @@
             // fix 首行
             output = '\\n' + output;
 
-            output = output.split('\\n')
+            output = output.split(SPLIT_LINE_TOKEN)
                 .map(function (str) {
                     return str.replace(/(^\s*)/g, '$1\'') + '\'';
                 })
@@ -180,6 +188,7 @@
     }
 
     if (typeof exports !== 'undefined') {
+        /* eslint-env node */
         // Node.js module.
         module.exports = exports = html2js;
     } else if (typeof window === 'object') {

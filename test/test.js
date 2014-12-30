@@ -1,24 +1,39 @@
 /**
- * @file tdd
+ * @file test
+ * @author junmer[junmer@foxmail.com]
  */
 
-var vows        = require('vows');
-var assert      = require('assert');
-var extend      = require('extend');
+/* eslint-disable no-console */
+/* eslint-env node */
 
-var fs          = require('fs');
-var path        = require('path');
-var html2js     = require('../html2js');
+var vows = require('vows');
+var assert = require('assert');
+var extend = require('extend');
 
-var filename    = 'test.html';
-var filePath    = path.resolve( __dirname, filename );
-var source      = fs.readFileSync( filePath , 'utf8' );
+var fs = require('fs');
+var path = require('path');
+var html2js = require('../html2js');
+
+var filename = 'test.html';
+var filePath = path.resolve(__dirname, filename);
+var source = fs.readFileSync(filePath, 'utf8');
+
+
+/**
+ * runJs replace eval
+ *
+ * @param  {string} code code
+ * @return {any}
+ */
+function runJs(code) {
+    return new Function('return ' + code)();
+}
 
 // basic case
 var basicCase = {
 
-    'type is string': function(topic) {
-        assert.equal(typeof(topic), 'string');
+    'type is string': function (topic) {
+        assert.equal(typeof (topic), 'string');
     }
 
 };
@@ -26,14 +41,14 @@ var basicCase = {
 // eval case
 var evalCase = {
 
-    'can be eval': function(topic) {
-        assert.doesNotThrow(function() {
-            eval(topic);
+    'can be eval': function (topic) {
+        assert.doesNotThrow(function () {
+            runJs(topic);
         }, Error);
     },
 
-    'eval return type is string': function(topic) {
-        assert.equal(typeof(eval(topic)), 'string');
+    'eval return type is string': function (topic) {
+        assert.equal(typeof (runJs(topic)), 'string');
     }
 
 };
@@ -42,50 +57,62 @@ var evalCase = {
 vows.describe('html2js').addBatch({
 
     'default': extend({
-        topic: function() {
+        topic: function () {
             return html2js(source);
         }
+
     }, basicCase, evalCase),
 
     'use format mode': extend({
-        topic: function() {
-            return html2js(source, {mode: 'format'});
+        topic: function () {
+            return html2js(source, {
+                mode: 'format'
+            });
         },
 
-        'has `\\n`': function(topic) {
+        'has `\\n`': function (topic) {
             assert.ok(/\n/.test(topic));
         }
+
     }, basicCase, evalCase),
 
     'use compress mode': extend({
-        topic: function() {
-            return html2js(source, {mode: 'compress'});
+        topic: function () {
+            return html2js(source, {
+                mode: 'compress'
+            });
         },
 
-        'has not `\\n`': function(topic) {
+        'has not `\\n`': function (topic) {
             assert.ok(!/\n/.test(topic));
         }
+
     }, basicCase, evalCase),
 
     'with amd wrapper': extend({
-        topic: function() {
-            return html2js(source, {wrap: 'amd'});
+        topic: function () {
+            return html2js(source, {
+                wrap: 'amd'
+            });
         },
 
-        'has `define`': function(topic) {
+        'has `define`': function (topic) {
             assert.ok(/define/.test(topic));
         }
+
     }, basicCase),
 
     'with commonjs wrapper': extend(basicCase, {
-        topic: function() {
-            return html2js(source, {wrap: 'commonjs'});
+        topic: function () {
+            return html2js(source, {
+                wrap: 'commonjs'
+            });
         },
 
-        'has `module.exports`': function(topic) {
+        'has `module.exports`': function (topic) {
             assert.ok(/module\.exports/.test(topic));
         }
-    }, basicCase)
 
+    }, basicCase)
 
 }).run(); // Run it

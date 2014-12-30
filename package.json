@@ -1,14 +1,20 @@
 {
   "name": "html2js",
-  "description": "html2js",
-  "version": "0.0.3",
+  "description": "simple html2js processer",
+  "version": "0.1.0",
   "author": {
     "name": "junmer",
     "email": "junmer@foxmail.com"
   },
   "scripts": {
-  	"test": "node test/test.js"
+    "example": "node test/example.js",
+    "test": "node test/test.js"
   },
   "repository": "https://github.com/junmer/html2js.git",
-  "main": "html2js.js"
+  "main": "html2js.js",
+  "devDependencies": {
+    "assert": "^1.3.0",
+    "extend": "^2.0.0",
+    "vows": "^0.8.1"
+  }
 }
