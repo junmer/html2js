@@ -25,29 +25,95 @@
     }
 
     /**
-     * wrap 包成 AMD 代码
+     * 字符串格式化
+     * 替换字符串中的${xx}字符
+     * 将xx作为data的字段名或者参数
+     * 用返回的结果加以替换
+     * @see https://github.com/ecomfe/saber-string/blob/master/src/format.js
+     *
+     * @inner
+     * @param {string} template 字符串模板
+     * @param {Object|Array|Function} data 数据
+     * @return {string}
+     */
+    function format(template, data) {
+        if (!template) {
+            return '';
+        }
+
+        if (data === null) {
+            return template;
+        }
+
+        var replacer = typeof data === 'function'
+                ? data
+                : function (key) {
+                    var res = data[key];
+                    return res === null ? '' : res;
+                };
+
+        return (template + '').replace(/\$\{(.+?)\}/g, function (match, key) {
+            return replacer(key);
+        });
+    }
+
+    /**
+     * WRAP_TPL
+     *
+     * @type {Object}
+     */
+    var WRAP_TPL = {
+        'amd': [
+            'define(function () {',
+            '${tab}return ${content};',
+            '});'
+        ],
+        'commonjs': [
+            'module.exports = ${content};'
+        ]
+    };
+
+
+    /**
+     * wrap 包成 AMD/COMMONJS 代码
      *
      * @inner
      * @param {string} content 目标字符串
-     * @param {bolean=} format 格式化标识
+     * @param {string} wrapType 目标字符串
+     * @param {bolean=} modeType 格式化标识
      * @return {string}
      */
-    function wrap(content, format) {
+    function wrap(content, wrapType, modeType) {
 
-        return [
-            'define(function () {',
-            (!!format ? '    ' : '') + 'return ' + content + ';',
-            '});'
-        ].join(!!format ? '\n' : '');
+        // 不需要包的 直接返回 content
+        if(!wrapType) {
+            return content;
+        }
+
+        var isFormat = (modeType === 'format');
+
+        // 默认用 amd wrapper
+        var tpl = (WRAP_TPL[wrapType] || WRAP_TPL.amd).join(isFormat ? '\n' : '');
+
+        var data = {
+            content: content,
+            tab: isFormat ? '    ' : ''     // 格式化补空格
+        };
+
+        return format(tpl, data);
 
     }
 
 
     /**
      * html2js
-     * @param  {String} content 目标
-     * @param  {Object=} opt     配置
-     * @param  {String} opt.mode     模式 compress|format|default
+     * @param  {String}   content 目标
+     * @param  {Object=}  opt     配置
+     * @param  {String＝} opt.mode   模式
+     *                               compress 压缩
+     *                               format   格式化
+     *                               default  默认 不处理
+     *
      * @param  {String} opt.wrap     转AMD
      * @return {String}
      */
@@ -99,17 +165,15 @@
         }
         else {
 
-            // fix 左右 ’
+            // fix 左右 '
             output = '\'' + output + '\'';
 
         }
 
         // 包起来
-        if (options.wrap) {
 
-            output = wrap(output, options.mode === 'format');
+        output = wrap(output, options.wrap, options.mode);
 
-        }
 
         return output;
 
