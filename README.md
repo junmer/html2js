@@ -1,7 +1,6 @@
-html2js
-===
+# html2js [![Build Status](https://travis-ci.org/junmer/html2js.svg?branch=master)](https://travis-ci.org/junmer/html2js)
 
-RT. html2js. 解决require tpl无法跨域的问题
+> simple html2js processer, i use it solve requirejs text crossdomain
 
 ## example
 
