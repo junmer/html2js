@@ -1,11 +1,14 @@
 {
   "name": "html2js",
   "description": "simple html2js processer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "junmer",
     "email": "junmer@foxmail.com"
   },
+  "files": [
+    "html2js.js"
+  ],
   "scripts": {
     "example": "node test/example.js",
     "test": "node test/test.js"
