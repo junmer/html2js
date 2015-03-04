@@ -4,7 +4,7 @@
  *     wrap: 'amd'
  * })
  */
-define(function () {return '<div id="i-am-a-id">\n  <div class="i-am-a-class">\n    i am test\n  </div>\n</div>';});
+define(function () {return '<div id="i-am-a-id">\n  <div class="i-am-a-class">\n    i am test\n  </div>\n</div>\n<script>\n    var test = \'test\';\n    alert(test);\n</'+'script>\n';});
 
 /**
  * html2js(source, {
@@ -12,7 +12,7 @@ define(function () {return '<div id="i-am-a-id">\n  <div class="i-am-a-class">\n
  *     wrap: 'commonjs'
  * })
  */
-module.exports = '<div id="i-am-a-id">\n  <div class="i-am-a-class">\n    i am test\n  </div>\n</div>';
+module.exports = '<div id="i-am-a-id">\n  <div class="i-am-a-class">\n    i am test\n  </div>\n</div>\n<script>\n    var test = \'test\';\n    alert(test);\n</'+'script>\n';
 
 /**
  * html2js(source, {
@@ -20,7 +20,7 @@ module.exports = '<div id="i-am-a-id">\n  <div class="i-am-a-class">\n    i am t
  *     wrap: false
  * })
  */
-'<div id="i-am-a-id">\n  <div class="i-am-a-class">\n    i am test\n  </div>\n</div>'
+'<div id="i-am-a-id">\n  <div class="i-am-a-class">\n    i am test\n  </div>\n</div>\n<script>\n    var test = \'test\';\n    alert(test);\n</'+'script>\n'
 
 /**
  * html2js(source, {
@@ -34,7 +34,12 @@ define(function () {
         +   '<div class="i-am-a-class">'
         +     'i am test'
         +   '</div>'
-        + '</div>';
+        + '</div>'
+        + '<script>'
+        +     'var test = \'test\';'
+        +     'alert(test);'
+        + '</'+'script>'
+        + '';
 });
 
 /**
@@ -48,7 +53,12 @@ module.exports = ''
         +   '<div class="i-am-a-class">'
         +     'i am test'
         +   '</div>'
-        + '</div>';
+        + '</div>'
+        + '<script>'
+        +     'var test = \'test\';'
+        +     'alert(test);'
+        + '</'+'script>'
+        + '';
 
 /**
  * html2js(source, {
@@ -62,6 +72,11 @@ module.exports = ''
         +     'i am test'
         +   '</div>'
         + '</div>'
+        + '<script>'
+        +     'var test = \'test\';'
+        +     'alert(test);'
+        + '</'+'script>'
+        + ''
 
 /**
  * html2js(source, {
@@ -69,7 +84,7 @@ module.exports = ''
  *     wrap: 'amd'
  * })
  */
-define(function () {return '<div id="i-am-a-id"><div class="i-am-a-class">i am test</div></div>';});
+define(function () {return '<div id="i-am-a-id"><div class="i-am-a-class">i am test</div></div><script>var test = \'test\';alert(test);</'+'script>';});
 
 /**
  * html2js(source, {
@@ -77,7 +92,7 @@ define(function () {return '<div id="i-am-a-id"><div class="i-am-a-class">i am t
  *     wrap: 'commonjs'
  * })
  */
-module.exports = '<div id="i-am-a-id"><div class="i-am-a-class">i am test</div></div>';
+module.exports = '<div id="i-am-a-id"><div class="i-am-a-class">i am test</div></div><script>var test = \'test\';alert(test);</'+'script>';
 
 /**
  * html2js(source, {
@@ -85,4 +100,4 @@ module.exports = '<div id="i-am-a-id"><div class="i-am-a-class">i am test</div><
  *     wrap: false
  * })
  */
-'<div id="i-am-a-id"><div class="i-am-a-class">i am test</div></div>'
+'<div id="i-am-a-id"><div class="i-am-a-class">i am test</div></div><script>var test = \'test\';alert(test);</'+'script>'

@@ -123,6 +123,7 @@
      * @param  {string=}    opt.wrap 包
      *                               amd
      *                               commonjs
+     * @param {boolean=}     opt.ignoreScriptTag     忽略 script
      * @return {string}
      */
     function html2js(content, opt) {
@@ -158,7 +159,7 @@
 
         // 不压缩 + 连接
         // 编码规范
-        // https://github.com/ecomfe/spec/blob/master/javascript-code-style.md
+        // https://github.com/ecomfe/spec/blob/master/javascript-style-guide.md
         if (options.mode === 'format') {
 
             // fix 首行
@@ -182,6 +183,10 @@
 
         output = wrap(output, options.wrap, options.mode);
 
+        // fix script tag
+        if (!options.ignoreScriptTag) {
+            output = output.replace(/<\/script/g, '<\/\'+\'script');
+        }
 
         return output;
 

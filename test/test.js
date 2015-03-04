@@ -102,7 +102,7 @@ vows.describe('html2js').addBatch({
 
     }, basicCase),
 
-    'with commonjs wrapper': extend(basicCase, {
+    'with commonjs wrapper': extend({
         topic: function () {
             return html2js(source, {
                 wrap: 'commonjs'
@@ -111,6 +111,30 @@ vows.describe('html2js').addBatch({
 
         'has `module.exports`': function (topic) {
             assert.ok(/module\.exports/.test(topic));
+        }
+
+    }, basicCase),
+
+    'fix `script` tag': extend({
+        topic: function () {
+            return html2js(source);
+        },
+
+        'shoud not have `</script>`': function (topic) {
+            assert.ok(topic.indexOf('</script>') === -1);
+        }
+
+    }, basicCase),
+
+    'ignore fix `script` tag': extend({
+        topic: function () {
+            return html2js(source, {
+                ignoreScriptTag: true
+            });
+        },
+
+        'shoud have `</script>`': function (topic) {
+            assert.ok(topic.indexOf('</script>') > -1);
         }
 
     }, basicCase)
